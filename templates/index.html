@@ -1,110 +1,135 @@
-<!-- This is GUI for Breast Cancer Detection Application Using Machine Learning Classifer -->
-
+<!--GUI for Breast Cancer Detection Application using SVM-->
 <!DOCTYPE html>
-<html >
+<html>
+
 <head>
   <meta charset="UTF-8">
-  <title>ML API</title>
-
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Breast Cancer Detection</title>
   <style>
-    /* CSS code for button */
+    /*just bg and body style*/
     body {
-      background-image: url('static/images/world.jpg');
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
+      margin: 40px;
+      background-color: #808080;
+      background-image: linear-gradient(315deg, #de5499 19%, #a0c5ba 85%);
     }
 
-    /* CSS code for button */
-    .button_css {
-    color: #494949 !important;
-    text-transform: uppercase;
-    text-decoration: none;
-    background: #ffffff;
-    padding: 20px;
-    border: 4px solid #494949 !important;
-    display: inline-block;
-    transition: all 0.4s ease 0s;
+    .container {
+      border-radius: 5px;
+      text-align: center;
     }
-    
-    .button_css:hover {
-    color: #ffffff !important;
-    background: #f6b93b;
-    border-color: #f6b93b !important;
-    transition: all 0.4s ease 0s;
+
+    .btn-container {
+      background: white;
+      box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .head {
+      font-weight: bolder;
+    }
+
+    .btn-primary {
+      border-color: #ff33f !important;
+      color: #ffffff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+      background-color: #de5499 !important;
+      border-color: #de5499 !important;
+      padding: 5px;
+    }
+
+    label {
+      width: 50%;
+    }
+
+    #predict {
+      display: none;
+    }
+
+    .form-group {
+      padding: 2px;
     }
   </style>
-
+  <!--Font Awesome-->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 </head>
 
 <body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="head">Breast Cancer Detection</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-container">
 
-  <!-- Show Indian AI Hospital banner-->
-  <div>
-    <img src="static/images/Indian AI Hospital.png" class="w3-border w3-padding" alt="Indian AI Hospital" style="width:100%">
-  </div>
- 
- 
- <div class="login">
-	
-    <!-- Get input for predict the cancer -->
-    <center>
-    <form action="{{ url_for('predict')}}"method="post">
-        <h1>Enter the value of tumor features >>></h1>
-        
-    	<input type="text" name="mean_radius" placeholder="mean radius" required="required" />
-        <input type="text" name="mean_texture" placeholder="mean texture" required="required" />
-		<input type="text" name="mean_perimeter" placeholder="mean perimeter" required="required" />
-		<input type="text" name="mean_area" placeholder="mean area" required="required" />
-        <input type="text" name="mean_smoothness" placeholder="mean smoothness" required="required" />
-		<input type="text" name="mean_compactness" placeholder="mean compactness" required="required" />
-		<br>
-    	<input type="text" name="mean_concavity" placeholder="mean concavity" required="required" />
-        <input type="text" name="mean_concave_points" placeholder="mean concave points" required="required" />
-		<input type="text" name="mean_symmetry" placeholder="mean symmetry" required="required" />
-    	<input type="text" name="mean_fractal_dimension" placeholder="mean fractal dimension" required="required" />
-        <input type="text" name="radius_error" placeholder="radius error" required="required" />
-		<input type="text" name="texture_error" placeholder="texture error" required="required" />
-		<br>
-    	<input type="text" name="perimeter_error" placeholder="perimeter error" required="required" />
-        <input type="text" name="area_error" placeholder="area error " required="required" />
-		<input type="text" name="smoothness_error" placeholder="smoothness error" required="required" />
-    	<input type="text" name="compactness_error" placeholder="compactness error" required="required" />
-        <input type="text" name="concavity_error" placeholder="concavity error" required="required" />
-		<input type="text" name="concave_points_error" placeholder="concave points error" required="required" />
-    	<br>
-    	<input type="text" name="symmetry_error" placeholder="symmetry error" required="required" />
-        <input type="text" name="fractal_dimension_error" placeholder="fractal dimension error" required="required" />
-		<input type="text" name="worst_radius" placeholder="worst radius" required="required" />
-    	<input type="text" name="worst_texture" placeholder="worst texture" required="required" />
-        <input type="text" name="worst_perimeter" placeholder="worst perimeter" required="required" />
-		<input type="text" name="worst_area" placeholder="worst area" required="required" />
-		<br>
-    	<input type="text" name="worst_smoothness" placeholder="worst smoothness" required="required" />
-        <input type="text" name="worst_compactness" placeholder="worst compactness" required="required" />
-		<input type="text" name="worst_concavity" placeholder="worst concavity" required="required" />
-    	<input type="text" name="worst_concave_points" placeholder="worst concave points" required="required" />
-        <input type="text" name="worst_symmetry" placeholder="'worst symmetry" required="required" />
-		<input type="text" name="worst_fractal_dimension" placeholder="worst fractal dimension" required="required" />
-        <br>
-        <br>
-        
-        <!-- Show button -->
-        <div class="button_cont" align="center"><a class="button_css" href="http://bit.ly/breast-cancer-ml-project" target="_blank" rel="nofollow noopener">
-            <button type="submit" class="btn btn-primary btn-block btn-large"><strong>Predict Cancer</strong></button></a>
-        </div>
-        
-    </form>
-    </center>
-   
-   <!-- Show predicted output using ML model --> 
-   <div>
-       <center>
-   <h1>{{ prediction_text }}</h1>
-       </center>
-   </div>
+          <!-- Main Input For Receiving Query to our ML -->
+          <form action="{{ url_for('predict')}}" method="post" class="form-inline">
+            <div class="row">
+              <div class="col-md-6">
+                <img class="image" src="{{url_for('static', filename='img.jpeg')}}" width="100%" height="100%" />
+              </div>
+              <div class="col-md-6">
+                <div class="container">
+                  <h4>Enter Cell Details</h4>
+                  <div class="form-group">
+                    <label for="clump_thickness">Clump Thickness </label>
+                    <input type="text" class="form-control" name="clump_thickness" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="uniform_cell_size">Uniform Cell size</label>
+                    <input type="text" class="form-control" name="uniform_cell_size" required="required">
+                  </div>
+                  <div class="form-group">
+                    <label for="uniform_cell_shape">Uniform Cell shape</label>
+                    <input type="text" class="form-control" name="uniform_cell_shape" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="marginal_adhesion">Marginal Adhesion</label>
+                    <input type="text" class="form-control" name="marginal_adhesion" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="single_epithelial_size">Single Epithelial Cell Size</label>
+                    <input type="text" class="form-control" name="single_epithelial_size" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="bare_nuclei">Bare Nuclei</label>
+                    <input type="text" class="form-control" name="bare_nuclei" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="bland_chromatin">Bland Chromatin</label>
+                    <input type="text" class="form-control" name="bland_chromatin" required="required" />
+                  </div>
+                  <div class="form-group">
+                    <label for="normal_nucleoli">Normal Nucleoli</label>
+                    <input type="text" class="form-control" name="normal_nucleoli" required="required" />
+                  </div>
 
- </div>
-
+                  <div class="form-group">
+                    <label for="mitoses">Mitoses</label>
+                    <input type="text" class="form-control" name="mitoses" required="required" />
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-lg">Predict Cancer</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        <br />
+        <center>
+          <h1 style="background:#de5499">{{prediction_text}}</h1>
+        </center>
+        <br />
 </body>
+
 </html>
